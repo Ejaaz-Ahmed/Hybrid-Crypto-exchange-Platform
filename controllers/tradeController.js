@@ -27,7 +27,9 @@ const reserveOrderFunds = async (connection, user_id, order_type, trading_pair, 
   } else {
     const baseWallet = await getWalletInfoForUpdate(connection, user_id, baseSymbol);
 
-    if (baseWallet.balance < quantity) {
+    // Available base asset excludes locked amount
+    const availableBase = baseWallet.balance - (baseWallet.lockedBalance || 0);
+    if (availableBase < quantity) {
       throw new Error("Insufficient asset balance to place sell order.");
     }
 
@@ -225,6 +227,7 @@ export const placeOrder = async (req, res) => {
       }
     }
 
+    // Commit transaction BEFORE responding to client
     await connection.commit();
 
     await SystemLog.create({

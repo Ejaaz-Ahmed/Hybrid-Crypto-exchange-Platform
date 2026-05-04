@@ -1,5 +1,6 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -26,7 +27,8 @@
     .neon-text {
       background: linear-gradient(90deg, #22d3ee, #a855f7);
       -webkit-background-clip: text;
-      background-clip: text;           /* Standard property for compatibility */
+      background-clip: text;
+      /* Standard property for compatibility */
       -webkit-text-fill-color: transparent;
     }
 
@@ -36,34 +38,35 @@
     }
   </style>
 </head>
+
 <body class="gradient-bg min-h-screen text-white">
 
   <!-- Header -->
- <header class="border-b border-white/10 bg-black/40 backdrop-blur-md sticky top-0 z-50">
-  <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
-    <div class="flex items-center gap-3">
-      <div class="w-9 h-9 bg-gradient-to-br from-cyan-400 to-purple-600 rounded-xl flex items-center justify-center text-2xl font-bold">H</div>
-      <h1 class="text-2xl font-bold tracking-tight neon-text">Hybrid Cryptoexchange</h1>
+  <header class="border-b border-white/10 bg-black/40 backdrop-blur-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div><img src="Logo.png" alt="EAA Logo" class="h-9 w-auto"></div>
+        <h1 class="text-2xl font-bold tracking-tight neon-text">EAA Exchange</h1>
+      </div>
+
+      <nav class="flex items-center gap-8 text-sm font-medium">
+        <a href="index.html" class="nav-link">Dashboard</a>
+        <a href="market.html" class="nav-link">Markets</a>
+        <a href="order.html" class="nav-link">Trade</a>
+        <a href="sell.html" class="nav-link">Sell</a>
+        <a href="portfolio.html" class="nav-link">Portfolio</a>
+        <a href="account.html" class="nav-link">Account</a>
+      </nav>
+
+      <div id="auth-status" class="text-sm"></div>
     </div>
-
-    <nav class="flex items-center gap-8 text-sm font-medium">
-      <a href="index.html" class="nav-link">Dashboard</a>
-      <a href="market.html" class="nav-link">Markets</a>
-      <a href="order.html" class="nav-link">Trade</a>
-      <a href="sell.html" class="nav-link">Sell</a>
-      <a href="portfolio.html" class="nav-link">Portfolio</a>
-      <a href="account.html" class="nav-link">Account</a>
-    </nav>
-
-    <div id="auth-status" class="text-sm"></div>
-  </div>
-</header>
+  </header>
 
   <main class="flex items-center justify-center min-h-[calc(100vh-80px)] p-6">
     <div class="max-w-md w-full">
       <!-- Main Card -->
       <div class="glass-card rounded-3xl p-8 shadow-2xl shadow-purple-500/10">
-        
+
         <div class="text-center mb-8">
           <h2 class="text-3xl font-semibold mb-2">Welcome Back</h2>
           <p class="text-gray-400">Sign in to access the global crypto market</p>
@@ -72,12 +75,10 @@
         <!-- Tabs -->
         <div class="auth-tabs mb-8">
           <div class="tab-buttons flex border-b border-white/10">
-            <button id="login-tab" 
-                    class="tab-button active flex-1 py-4 text-lg font-medium transition-all">
+            <button id="login-tab" class="tab-button active flex-1 py-4 text-lg font-medium transition-all">
               Login
             </button>
-            <button id="register-tab" 
-                    class="tab-button flex-1 py-4 text-lg font-medium transition-all">
+            <button id="register-tab" class="tab-button flex-1 py-4 text-lg font-medium transition-all">
               Register
             </button>
           </div>
@@ -89,14 +90,14 @@
             <div>
               <label class="block text-sm font-medium text-gray-300 mb-2">Email Address</label>
               <input type="email" name="email" required
-                     class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:outline-none focus:border-cyan-400 transition-colors text-lg" 
-                     placeholder="you@example.com" />
+                class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:outline-none focus:border-cyan-400 transition-colors text-lg"
+                placeholder="you@example.com" />
             </div>
 
             <div>
               <label class="block text-sm font-medium text-gray-300 mb-2">Password</label>
               <input type="password" name="password" required
-                     class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:outline-none focus:border-cyan-400 transition-colors text-lg" />
+                class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:outline-none focus:border-cyan-400 transition-colors text-lg" />
             </div>
 
             <div class="flex items-center justify-between text-sm">
@@ -107,8 +108,8 @@
               <a href="#" class="text-cyan-400 hover:underline">Forgot password?</a>
             </div>
 
-            <button type="submit" 
-                    class="button button-primary w-full py-4 rounded-2xl bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 font-semibold text-lg transition-all duration-300 shadow-lg shadow-cyan-500/30">
+            <button type="submit"
+              class="button button-primary w-full py-4 rounded-2xl bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 font-semibold text-lg transition-all duration-300 shadow-lg shadow-cyan-500/30">
               Sign In
             </button>
 
@@ -122,30 +123,30 @@
             <div>
               <label class="block text-sm font-medium text-gray-300 mb-2">Full Name</label>
               <input type="text" name="full_name" required
-                     class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:outline-none focus:border-cyan-400 transition-colors" />
+                class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:outline-none focus:border-cyan-400 transition-colors" />
             </div>
 
             <div>
               <label class="block text-sm font-medium text-gray-300 mb-2">Email Address</label>
               <input type="email" name="email" required
-                     class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:outline-none focus:border-cyan-400 transition-colors" />
+                class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:outline-none focus:border-cyan-400 transition-colors" />
             </div>
 
             <div>
               <label class="block text-sm font-medium text-gray-300 mb-2">Password</label>
               <input type="password" name="password" required
-                     class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:outline-none focus:border-cyan-400 transition-colors" />
+                class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:outline-none focus:border-cyan-400 transition-colors" />
             </div>
 
             <div>
               <label class="block text-sm font-medium text-gray-300 mb-2">Country</label>
               <input type="text" name="country" required
-                     class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:outline-none focus:border-cyan-400 transition-colors" 
-                     placeholder="Pakistan" />
+                class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:outline-none focus:border-cyan-400 transition-colors"
+                placeholder="Pakistan" />
             </div>
 
-            <button type="submit" 
-                    class="button button-primary w-full py-4 rounded-2xl bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 font-semibold text-lg transition-all duration-300">
+            <button type="submit"
+              class="button button-primary w-full py-4 rounded-2xl bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 font-semibold text-lg transition-all duration-300">
               Create Account
             </button>
 
@@ -155,7 +156,7 @@
 
         <!-- Footer Text -->
         <div class="text-center text-xs text-gray-500 mt-8">
-          By signing in, you agree to our <span class="text-cyan-400 hover:underline cursor-pointer">Terms</span> and 
+          By signing in, you agree to our <span class="text-cyan-400 hover:underline cursor-pointer">Terms</span> and
           <span class="text-cyan-400 hover:underline cursor-pointer">Privacy Policy</span>
         </div>
       </div>
@@ -188,13 +189,14 @@
     });
   </script>
   <script>
-  // Highlight current page
-  const currentPage = window.location.pathname.split("/").pop() || "index.html";
-  document.querySelectorAll('.nav-link').forEach(link => {
-    if (link.getAttribute('href') === currentPage) {
-      link.classList.add('active');
-    }
-  });
-</script>
+    // Highlight current page
+    const currentPage = window.location.pathname.split("/").pop() || "index.html";
+    document.querySelectorAll('.nav-link').forEach(link => {
+      if (link.getAttribute('href') === currentPage) {
+        link.classList.add('active');
+      }
+    });
+  </script>
 </body>
+
 </html>

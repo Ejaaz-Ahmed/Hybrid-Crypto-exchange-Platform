@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const [userResponse, portfolioResponse, ordersResponse, tradesResponse] = await Promise.all([
         fetch(`/api/users/${userId}`, { headers: { Authorization: `Bearer ${token}` } }),
         fetch(`/api/users/${userId}/portfolio`, { headers: { Authorization: `Bearer ${token}` } }),
-        fetch(`/api/trade/orders/${userId}`, { headers: { Authorization: `Bearer ${token}` } }),
+        fetch(`/api/trade/orders/all`, { headers: { Authorization: `Bearer ${token}` } }),
         fetch('/api/market/prices', { headers: { Authorization: `Bearer ${token}` } }),
       ]);
 

@@ -38,13 +38,16 @@ export const registerUser = async (req, res) => {
 
         const userId = userResult.rows[0][0];
 
-        const assets = await executeQuery(`SELECT asset_id FROM ASSETS`);
-
+        const assets = await executeQuery(`SELECT asset_id, symbol FROM ASSETS`);
         for (const asset of assets.rows) {
+            const assetId = asset[0];
+            const symbol = asset[1];
+            const initialBalance = symbol === 'USDT' ? 100000 : 0;
+            
             await executeQuery(
                 `INSERT INTO WALLETS (user_id, asset_id, balance, locked_balance)
-                 VALUES (:1, :2, 0, 0)`,
-                [userId, asset[0]]
+                 VALUES (:1, :2, :3, 0)`,
+                [userId, assetId, initialBalance]
             );
         }
 

@@ -26,6 +26,8 @@ export function Dashboard() {
   const [tradeMessage, setTradeMessage] = useState({ text: '', type: '' });
   const [walletMessage, setWalletMessage] = useState({ text: '', type: '' });
 
+  const [orderFilter, setOrderFilter] = useState<'ALL' | 'OPEN'>('OPEN');
+
   const fetchDashboardData = async () => {
     const userId = localStorage.getItem('userId');
     if (!userId) return;
@@ -114,6 +116,8 @@ export function Dashboard() {
   };
 
   if (loading) return <div className="text-sm text-slate-500">Loading dashboard...</div>;
+
+  const filteredOrders = orders.filter(o => orderFilter === 'ALL' || (o.status !== 'FILLED' && o.status !== 'CANCELLED'));
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -205,8 +209,16 @@ export function Dashboard() {
 
       {/* 4. Recent Orders */}
       <Card className="lg:col-span-12">
-        <CardHeader>
+        <CardHeader className="flex flex-row justify-between items-center">
           <CardTitle className="text-xs text-slate-500 uppercase">Recent Orders</CardTitle>
+          <select 
+            value={orderFilter} 
+            onChange={(e) => setOrderFilter(e.target.value as any)}
+            className="text-[10px] uppercase font-bold border-slate-200 rounded-sm px-2 py-1 outline-none focus:ring-1 focus:ring-blue-500"
+          >
+            <option value="ALL">All Orders</option>
+            <option value="OPEN">Open Only</option>
+          </select>
         </CardHeader>
         <CardContent className="p-0 max-h-64 overflow-auto">
           <Table>
@@ -220,21 +232,21 @@ export function Dashboard() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {orders.length === 0 ? (
+              {filteredOrders.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={5} className="text-center text-slate-500">No recent orders</TableCell>
+                  <TableCell colSpan={5} className="text-center text-slate-500">No {orderFilter.toLowerCase()} orders</TableCell>
                 </TableRow>
               ) : (
-                orders.slice(0, 5).map((o, i) => (
+                filteredOrders.slice(0, 10).map((o, i) => (
                   <TableRow key={i}>
                     <TableCell className="font-medium">{o.trading_pair}</TableCell>
                     <TableCell className={o.order_type === 'BUY' ? 'text-green-600 font-semibold' : 'text-red-600 font-semibold'}>
                       {o.order_type}
                     </TableCell>
-                    <TableCell className="text-right numeric">${o.price}</TableCell>
-                    <TableCell className="text-right numeric">{o.filled_quantity || 0} / {o.quantity}</TableCell>
+                    <TableCell className="text-right numeric font-mono">${Number(o.price).toFixed(2)}</TableCell>
+                    <TableCell className="text-right numeric">{Number(o.filled_quantity).toFixed(4)} / {Number(o.quantity).toFixed(4)}</TableCell>
                     <TableCell className="text-right">
-                      <span className="inline-flex items-center rounded-sm bg-slate-100 px-2 py-0.5 text-[10px] font-medium text-slate-800 uppercase">
+                      <span className={`inline-flex items-center rounded-sm px-2 py-0.5 text-[10px] font-bold uppercase ${o.status === 'FILLED' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'}`}>
                         {o.status}
                       </span>
                     </TableCell>
@@ -259,9 +271,15 @@ export function Dashboard() {
             </div>
             <div className="grid grid-cols-2 gap-3">
               <Input label="Pair" value={qtPair} onChange={(e) => setQtPair(e.target.value)} placeholder="BTC/USDT" required />
-              <Input label="Price" type="number" step="0.01" value={qtPrice} onChange={(e) => setQtPrice(e.target.value)} required />
+              <Input label="Price per Unit (USD)" type="number" step="0.01" value={qtPrice} onChange={(e) => setQtPrice(e.target.value)} required />
             </div>
             <Input label="Quantity" type="number" step="0.0001" value={qtQty} onChange={(e) => setQtQty(e.target.value)} required />
+            
+            <div className="flex justify-between items-center text-[10px] uppercase font-bold text-slate-500 mt-1 px-1">
+              <span>Estimated Total:</span>
+              <span className="font-mono text-slate-900">${(Number(qtPrice) * Number(qtQty) || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+            </div>
+
             <Button type="submit" className="w-full h-8 text-xs mt-2" variant={qtSide === 'BUY' ? 'primary' : 'danger'}>
               Submit {qtSide} Order
             </Button>

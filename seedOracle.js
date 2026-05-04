@@ -97,20 +97,8 @@ async function seedOracleData() {
       );
     }
 
-    const orders = [
-      { user_id: userMap['john@example.com'], trading_pair: 'BTC/USDT', order_type: 'BUY', price: 45000, quantity: 0.1, order_status: 'OPEN' },
-      { user_id: userMap['jane@example.com'], trading_pair: 'ETH/USDT', order_type: 'SELL', price: 3000, quantity: 1.0, order_status: 'OPEN' },
-      { user_id: userMap['bob@example.com'], trading_pair: 'SOL/USDT', order_type: 'BUY', price: 100, quantity: 10.0, order_status: 'OPEN' },
-    ];
-
-    for (const order of orders) {
-      await connection.execute(
-        `INSERT INTO ORDERS (user_id, trading_pair, order_type, price, quantity, order_status)
-         VALUES (:user_id, :trading_pair, :order_type, :price, :quantity, :order_status)`,
-        order,
-        { autoCommit: false }
-      );
-    }
+    // Note: OPEN orders are no longer seeded here because they require corresponding locked_balance
+    // updates in the WALLETS table to prevent ORA-02290 constraint violations during matching.
     await connection.commit();
 
     console.log('Sample Oracle data inserted successfully.');
