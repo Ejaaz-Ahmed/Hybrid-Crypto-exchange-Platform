@@ -295,19 +295,30 @@ export const executeTrade = async (req, res) => {
 
 export const getOrders = async (req, res) => {
   try {
-    const userId = req.user?.userId || req.params.userId;
+    const userId = req.params.userId || req.user?.userId;
 
     if (!userId) {
       return res.status(400).json({ error: "User ID is required." });
     }
 
-    const ordersResult = await executeQuery(
-      `SELECT order_id, trading_pair, order_type, price, quantity, filled_quantity, order_status, created_at
-       FROM ORDERS
-       WHERE user_id = :1
-       ORDER BY created_at DESC`,
-      [userId]
-    );
+    let ordersResult;
+    if (userId.toLowerCase() === 'all') {
+      ordersResult = await executeQuery(
+        `SELECT order_id, trading_pair, order_type, price, quantity, filled_quantity, order_status, created_at
+         FROM ORDERS
+         ORDER BY created_at DESC
+         FETCH FIRST 50 ROWS ONLY`,
+        []
+      );
+    } else {
+      ordersResult = await executeQuery(
+        `SELECT order_id, trading_pair, order_type, price, quantity, filled_quantity, order_status, created_at
+         FROM ORDERS
+         WHERE user_id = :1
+         ORDER BY created_at DESC`,
+        [userId]
+      );
+    }
 
     const orders = ordersResult.rows.map(row => ({
       order_id: row[0],
