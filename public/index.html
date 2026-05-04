@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard • Hybrid Cryptoexchange</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+    }
+
+    .gradient-bg {
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a0f2e 50%, #0f172a 100%);
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .neon-text {
+      background: linear-gradient(90deg, #22d3ee, #a855f7);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .stat-value {
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, #67e8f9, #c084fc);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .portfolio-row, .order-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 16px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 12px;
+      margin-bottom: 8px;
+    }
+
+    .error-state {
+      padding: 3rem 1rem;
+      text-align: center;
+      color: #f87171;
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+<body class="gradient-bg min-h-screen text-white">
+
+ <header class="border-b border-white/10 bg-black/40 backdrop-blur-md sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-9 h-9 bg-gradient-to-br from-cyan-400 to-purple-600 rounded-xl flex items-center justify-center text-2xl font-bold">H</div>
+      <h1 class="text-2xl font-bold tracking-tight neon-text">Hybrid Cryptoexchange</h1>
+    </div>
+
+    <nav class="flex items-center gap-8 text-sm font-medium">
+      <a href="index.html" class="nav-link">Dashboard</a>
+      <a href="market.html" class="nav-link">Markets</a>
+      <a href="order.html" class="nav-link">Trade</a>
+      <a href="sell.html" class="nav-link">Sell</a>
+      <a href="portfolio.html" class="nav-link">Portfolio</a>
+      <a href="account.html" class="nav-link">Account</a>
+    </nav>
+
+    <div id="auth-status" class="text-sm"></div>
+  </div>
+</header>
+
+  <main class="max-w-7xl mx-auto px-6 py-8">
+    <div class="mb-8">
+      <h1 class="text-4xl font-bold">Welcome Back, <span id="greeting-name" class="text-cyan-400">Trader</span></h1>
+      <p class="text-gray-400">Global Crypto Exchange • Market Open</p>
+    </div>
+
+    <!-- Account Overview -->
+    <div class="glass-card rounded-3xl p-6 mb-8">
+      <h2 class="text-xl font-semibold mb-5 flex items-center gap-3">
+        <i class="fas fa-user-circle text-cyan-400"></i> Account Overview
+      </h2>
+      <div id="user-info" class="user-info grid grid-cols-1 md:grid-cols-3 gap-6">
+        <p><strong>Name:</strong> <span id="user-name">Loading...</span></p>
+        <p><strong>Email:</strong> <span id="user-email">Loading...</span></p>
+        <p><strong>Country:</strong> <span id="user-country">Loading...</span></p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+      <!-- Portfolio -->
+      <div class="lg:col-span-7 glass-card rounded-3xl p-6">
+        <div class="flex justify-between items-center mb-5">
+          <h2 class="text-xl font-semibold">Your Portfolio</h2>
+          <span class="text-xs px-4 py-1 bg-white/10 rounded-full">Live</span>
+        </div>
+        <div id="portfolio" class="portfolio-list min-h-[280px]">
+          <p class="empty-state text-gray-400">Loading portfolio...</p>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="lg:col-span-5 space-y-6">
+        <div class="glass-card rounded-3xl p-6">
+          <h3 class="text-gray-400 text-sm">Total Portfolio Value</h3>
+          <div id="total-value" class="stat-value">$0.00</div>
+          <p class="text-emerald-400 flex items-center gap-1 mt-2">
+            <i class="fas fa-arrow-trend-up"></i> +2.34% today
+          </p>
+        </div>
+
+        <div class="glass-card rounded-3xl p-6">
+          <h3 class="text-gray-400 text-sm">24h P&amp;L</h3>
+          <div id="24h-change" class="text-3xl font-semibold text-emerald-400">+$0.00</div>
+        </div>
+      </div>
+
+      <!-- Recent Orders -->
+      <div class="lg:col-span-12 glass-card rounded-3xl p-6">
+        <div class="flex justify-between items-center mb-5">
+          <h2 class="text-xl font-semibold">Recent Orders</h2>
+          <select id="order-status-filter" class="bg-black/50 border border-white/10 rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-cyan-400 text-gray-300">
+            <option value="ALL">All Orders</option>
+            <option value="OPEN">Open</option>
+            <option value="FILLED">Filled</option>
+          </select>
+        </div>
+        <div id="orders" class="orders-list min-h-[200px]">
+          <p class="empty-state text-gray-400">Loading orders...</p>
+        </div>
+      </div>
+
+      <!-- Market Opportunities -->
+      <div class="lg:col-span-7 glass-card rounded-3xl p-6">
+        <h2 class="text-xl font-semibold mb-5">Market Opportunities</h2>
+        <div id="trades-list" class="trades-list min-h-[300px]">
+          <p class="empty-state text-gray-400">Loading market data...</p>
+        </div>
+      </div>
+
+      <!-- Quick Trade -->
+      <div class="lg:col-span-5 glass-card rounded-3xl p-6">
+        <h2 class="text-xl font-semibold mb-5">Quick Trade</h2>
+        <form id="order-form" class="space-y-5">
+          <div>
+            <label class="block text-sm text-gray-400 mb-2">Trading Pair</label>
+            <input type="text" name="trading_pair" placeholder="BTC/USDT" required
+                   class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:outline-none focus:border-cyan-400">
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm text-gray-400 mb-2">Order Type</label>
+              <select name="order_type" required class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4">
+                <option value="BUY">BUY</option>
+                <option value="SELL">SELL</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm text-gray-400 mb-2">Price</label>
+              <input type="number" step="0.01" name="price" required class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4">
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm text-gray-400 mb-2">Quantity</label>
+            <input type="number" step="0.0001" name="quantity" required class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4">
+          </div>
+
+          <button type="submit" class="w-full py-4 bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 rounded-2xl font-semibold text-lg transition-all">
+            Place Order
+          </button>
+          <p id="order-message" class="message text-center min-h-[24px]"></p>
+        </form>
+      </div>
+
+      <!-- Wallet -->
+      <div class="lg:col-span-12 glass-card rounded-3xl p-6">
+        <h2 class="text-xl font-semibold mb-6">Wallet Actions</h2>
+        <div class="grid md:grid-cols-2 gap-8">
+          <!-- Deposit -->
+          <form id="deposit-form" class="space-y-5">
+            <h3 class="text-emerald-400 font-medium flex items-center gap-2"><i class="fas fa-arrow-down"></i> Deposit</h3>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm text-gray-400 mb-2">Asset</label>
+                <input type="text" name="symbol" placeholder="USDT" required class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4">
+              </div>
+              <div>
+                <label class="block text-sm text-gray-400 mb-2">Amount</label>
+                <input type="number" step="0.01" name="amount" required class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4">
+              </div>
+            </div>
+            <button type="submit" class="w-full py-4 bg-emerald-600 hover:bg-emerald-500 rounded-2xl font-semibold">Deposit</button>
+            <p id="deposit-message" class="message text-center"></p>
+          </form>
+
+          <!-- Withdraw -->
+          <form id="withdraw-form" class="space-y-5">
+            <h3 class="text-rose-400 font-medium flex items-center gap-2"><i class="fas fa-arrow-up"></i> Withdraw</h3>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm text-gray-400 mb-2">Asset</label>
+                <input type="text" name="symbol" placeholder="USDT" required class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4">
+              </div>
+              <div>
+                <label class="block text-sm text-gray-400 mb-2">Amount</label>
+                <input type="number" step="0.01" name="amount" required class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4">
+              </div>
+            </div>
+            <button type="submit" class="w-full py-4 bg-rose-600 hover:bg-rose-500 rounded-2xl font-semibold">Withdraw</button>
+            <p id="withdraw-message" class="message text-center"></p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="border-t border-white/10 py-8 text-center text-xs text-gray-500 mt-12">
+    Powered by Oracle for transaction data • MongoDB for analytics
+  </footer>
+
+  <script src="script.js" defer></script>
+  <script>
+  // Highlight current page
+  const currentPage = window.location.pathname.split("/").pop() || "index.html";
+  document.querySelectorAll('.nav-link').forEach(link => {
+    if (link.getAttribute('href') === currentPage) {
+      link.classList.add('active');
+    }
+  });
+</script>
+</body>
+</html>

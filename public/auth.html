@@ -1,0 +1,200 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login • CryptoExchangePlatform</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+    }
+
+    .gradient-bg {
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a0f2e 50%, #0f172a 100%);
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .neon-text {
+      background: linear-gradient(90deg, #22d3ee, #a855f7);
+      -webkit-background-clip: text;
+      background-clip: text;           /* Standard property for compatibility */
+      -webkit-text-fill-color: transparent;
+    }
+
+    .tab-button.active {
+      border-bottom: 3px solid #22d3ee;
+      color: white;
+    }
+  </style>
+</head>
+<body class="gradient-bg min-h-screen text-white">
+
+  <!-- Header -->
+ <header class="border-b border-white/10 bg-black/40 backdrop-blur-md sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-9 h-9 bg-gradient-to-br from-cyan-400 to-purple-600 rounded-xl flex items-center justify-center text-2xl font-bold">H</div>
+      <h1 class="text-2xl font-bold tracking-tight neon-text">Hybrid Cryptoexchange</h1>
+    </div>
+
+    <nav class="flex items-center gap-8 text-sm font-medium">
+      <a href="index.html" class="nav-link">Dashboard</a>
+      <a href="market.html" class="nav-link">Markets</a>
+      <a href="order.html" class="nav-link">Trade</a>
+      <a href="sell.html" class="nav-link">Sell</a>
+      <a href="portfolio.html" class="nav-link">Portfolio</a>
+      <a href="account.html" class="nav-link">Account</a>
+    </nav>
+
+    <div id="auth-status" class="text-sm"></div>
+  </div>
+</header>
+
+  <main class="flex items-center justify-center min-h-[calc(100vh-80px)] p-6">
+    <div class="max-w-md w-full">
+      <!-- Main Card -->
+      <div class="glass-card rounded-3xl p-8 shadow-2xl shadow-purple-500/10">
+        
+        <div class="text-center mb-8">
+          <h2 class="text-3xl font-semibold mb-2">Welcome Back</h2>
+          <p class="text-gray-400">Sign in to access the global crypto market</p>
+        </div>
+
+        <!-- Tabs -->
+        <div class="auth-tabs mb-8">
+          <div class="tab-buttons flex border-b border-white/10">
+            <button id="login-tab" 
+                    class="tab-button active flex-1 py-4 text-lg font-medium transition-all">
+              Login
+            </button>
+            <button id="register-tab" 
+                    class="tab-button flex-1 py-4 text-lg font-medium transition-all">
+              Register
+            </button>
+          </div>
+        </div>
+
+        <!-- Login Form -->
+        <div id="login-content" class="tab-pane active">
+          <form id="login-form" class="auth-form space-y-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-300 mb-2">Email Address</label>
+              <input type="email" name="email" required
+                     class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:outline-none focus:border-cyan-400 transition-colors text-lg" 
+                     placeholder="you@example.com" />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-300 mb-2">Password</label>
+              <input type="password" name="password" required
+                     class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:outline-none focus:border-cyan-400 transition-colors text-lg" />
+            </div>
+
+            <div class="flex items-center justify-between text-sm">
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" class="w-4 h-4 accent-cyan-400" />
+                <span class="text-gray-400">Remember me</span>
+              </label>
+              <a href="#" class="text-cyan-400 hover:underline">Forgot password?</a>
+            </div>
+
+            <button type="submit" 
+                    class="button button-primary w-full py-4 rounded-2xl bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 font-semibold text-lg transition-all duration-300 shadow-lg shadow-cyan-500/30">
+              Sign In
+            </button>
+
+            <p id="login-message" class="message text-center text-sm min-h-[20px]"></p>
+          </form>
+        </div>
+
+        <!-- Register Form -->
+        <div id="register-content" class="tab-pane hidden">
+          <form id="register-form" class="auth-form space-y-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-300 mb-2">Full Name</label>
+              <input type="text" name="full_name" required
+                     class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:outline-none focus:border-cyan-400 transition-colors" />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-300 mb-2">Email Address</label>
+              <input type="email" name="email" required
+                     class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:outline-none focus:border-cyan-400 transition-colors" />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-300 mb-2">Password</label>
+              <input type="password" name="password" required
+                     class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:outline-none focus:border-cyan-400 transition-colors" />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-300 mb-2">Country</label>
+              <input type="text" name="country" required
+                     class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:outline-none focus:border-cyan-400 transition-colors" 
+                     placeholder="Pakistan" />
+            </div>
+
+            <button type="submit" 
+                    class="button button-primary w-full py-4 rounded-2xl bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 font-semibold text-lg transition-all duration-300">
+              Create Account
+            </button>
+
+            <p id="register-message" class="message text-center text-sm min-h-[20px]"></p>
+          </form>
+        </div>
+
+        <!-- Footer Text -->
+        <div class="text-center text-xs text-gray-500 mt-8">
+          By signing in, you agree to our <span class="text-cyan-400 hover:underline cursor-pointer">Terms</span> and 
+          <span class="text-cyan-400 hover:underline cursor-pointer">Privacy Policy</span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="app.js" defer></script>
+
+  <script>
+    // Tab switching functionality
+    const loginTab = document.getElementById('login-tab');
+    const registerTab = document.getElementById('register-tab');
+    const loginContent = document.getElementById('login-content');
+    const registerContent = document.getElementById('register-content');
+
+    loginTab.addEventListener('click', () => {
+      loginTab.classList.add('active');
+      registerTab.classList.remove('active');
+      loginContent.classList.add('active');
+      loginContent.classList.remove('hidden');
+      registerContent.classList.add('hidden');
+    });
+
+    registerTab.addEventListener('click', () => {
+      registerTab.classList.add('active');
+      loginTab.classList.remove('active');
+      registerContent.classList.add('active');
+      registerContent.classList.remove('hidden');
+      loginContent.classList.add('hidden');
+    });
+  </script>
+  <script>
+  // Highlight current page
+  const currentPage = window.location.pathname.split("/").pop() || "index.html";
+  document.querySelectorAll('.nav-link').forEach(link => {
+    if (link.getAttribute('href') === currentPage) {
+      link.classList.add('active');
+    }
+  });
+</script>
+</body>
+</html>

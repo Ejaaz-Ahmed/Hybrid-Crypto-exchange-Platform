@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Account • Hybrid Cryptoexchange</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    .gradient-bg { background: linear-gradient(135deg, #0a0a0a 0%, #1a0f2e 50%, #0f172a 100%); }
+    .glass-card { background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.1); }
+    .neon-text { background: linear-gradient(90deg, #22d3ee, #a855f7); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  </style>
+</head>
+<body class="gradient-bg min-h-screen text-white">
+
+  <!-- Consistent Header -->
+  <header class="border-b border-white/10 bg-black/40 backdrop-blur-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 bg-gradient-to-br from-cyan-400 to-purple-600 rounded-xl flex items-center justify-center text-2xl font-bold">H</div>
+        <h1 class="text-2xl font-bold tracking-tight neon-text">Hybrid Cryptoexchange</h1>
+      </div>
+
+      <nav class="flex items-center gap-8 text-sm font-medium">
+        <a href="index.html" class="nav-link">Dashboard</a>
+        <a href="market.html" class="nav-link">Markets</a>
+        <a href="order.html" class="nav-link">Trade</a>
+        <a href="sell.html" class="nav-link">Sell</a>
+        <a href="portfolio.html" class="nav-link">Portfolio</a>
+        <a href="account.html" class="nav-link active">Account</a>
+      </nav>
+
+      <div id="auth-status" class="text-sm"></div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-6 py-8">
+    <h1 class="text-4xl font-bold mb-2">Account Settings</h1>
+    <p class="text-gray-400 mb-8">Manage your profile and trading preferences</p>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <!-- Profile Card -->
+      <div class="lg:col-span-5 glass-card rounded-3xl p-8">
+        <h2 class="text-2xl font-semibold mb-6">Profile Information</h2>
+        <div id="user-info" class="space-y-6 text-sm">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Account Summary -->
+      <div class="lg:col-span-7 glass-card rounded-3xl p-8">
+        <h2 class="text-2xl font-semibold mb-6">Account Overview</h2>
+        <div class="grid grid-cols-2 gap-6">
+          <div class="bg-white/5 rounded-2xl p-6">
+            <p class="text-gray-400 text-sm">Total Portfolio Value</p>
+            <p id="total-value" class="text-3xl font-bold text-cyan-400">$0.00</p>
+          </div>
+          <div class="bg-white/5 rounded-2xl p-6">
+            <p class="text-gray-400 text-sm">24h Change</p>
+            <p id="24h-change" class="text-3xl font-bold text-emerald-400">+0.00</p>
+          </div>
+        </div>
+
+        <div class="mt-8">
+          <button onclick="logout()" 
+                  class="w-full py-4 bg-red-600 hover:bg-red-500 rounded-2xl font-semibold transition-all">
+            Sign Out
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Highlight active nav
+    document.querySelectorAll('.nav-link').forEach(link => {
+      if (link.getAttribute('href') === 'account.html') link.classList.add('active');
+    });
+
+    const formatCurrency = (value) => {
+      const number = Number(value) || 0;
+      return `$${number.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    };
+
+    const SYMBOL_ALIASES = {
+      BITCOIN: 'BTC',
+      ETHEREUM: 'ETH',
+      SOLANA: 'SOL',
+      BINANCECOIN: 'BNB',
+      CARDANO: 'ADA',
+      POLYGON: 'MATIC',
+      CHAINLINK: 'LINK',
+      POLKADOT: 'DOT',
+      TETHER: 'USDT',
+    };
+
+    const normalizeSymbol = (value) => {
+      const symbol = String(value || '').trim().toUpperCase();
+      return SYMBOL_ALIASES[symbol] || symbol;
+    };
+
+    const calculatePortfolioValue = (portfolio = [], prices = []) => {
+      const priceMap = new Map();
+      for (const trade of prices) {
+        const [baseSymbol] = String(trade?.trading_pair || '').split('/');
+        const normalizedBase = normalizeSymbol(baseSymbol);
+        const numericPrice = Number(trade?.price);
+        if (normalizedBase && Number.isFinite(numericPrice) && numericPrice > 0) {
+          priceMap.set(normalizedBase, numericPrice);
+        }
+      }
+
+      return portfolio.reduce((total, asset) => {
+        const symbol = normalizeSymbol(asset?.symbol);
+        const quantity = Number(asset?.balance || 0) + Number(asset?.lockedBalance || 0);
+        if (!quantity) return total;
+        if (symbol === 'USDT' || symbol === 'USD') return total + quantity;
+        const directPrice = priceMap.get(symbol);
+        return directPrice ? total + quantity * directPrice : total;
+      }, 0);
+    };
+
+    function logout() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('userId');
+      window.location.href = '/auth.html';
+    }
+
+    // Load user data
+    async function loadAccountData() {
+      const userId = localStorage.getItem('userId');
+      const token = localStorage.getItem('token');
+      const container = document.getElementById('user-info');
+      const authStatus = document.getElementById('auth-status');
+      const totalValueEl = document.getElementById('total-value');
+      const dayChangeEl = document.getElementById('24h-change');
+
+      if (authStatus) {
+        authStatus.textContent = userId ? "Loading..." : "Not signed in";
+      }
+
+      if (!userId || !token) {
+        container.innerHTML = `<p class="text-red-400">Please login to view account details.</p>`;
+        if (totalValueEl) totalValueEl.textContent = '$0.00';
+        if (dayChangeEl) dayChangeEl.textContent = '+0.00';
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/users/${userId}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const user = await res.json();
+
+        if (authStatus && userId) {
+          authStatus.textContent = `Signed in as ${user?.full_name || user?.email || userId}`;
+        }
+
+        if (res.ok) {
+          container.innerHTML = `
+            <div class="flex items-center gap-4 mb-6">
+              <div class="w-16 h-16 bg-gradient-to-br from-cyan-400 to-purple-600 rounded-2xl flex items-center justify-center text-4xl">👤</div>
+              <div>
+                <h3 class="text-2xl font-semibold">${user.full_name || 'Trader'}</h3>
+                <p class="text-gray-400">${user.email}</p>
+              </div>
+            </div>
+            <p><strong>Country:</strong> ${user.country || 'Not set'}</p>
+            <p><strong>Trader ID:</strong> ${userId}</p>
+            <p><strong>Member Since:</strong> ${new Date().getFullYear()}</p>
+          `;
+        } else {
+          container.innerHTML = `<p class="text-red-400">${user.error || 'Failed to load profile.'}</p>`;
+        }
+
+        const [portfolioRes, marketRes] = await Promise.all([
+          fetch(`/api/users/${userId}/portfolio`, { headers: { Authorization: `Bearer ${token}` } }),
+          fetch('/api/market/prices', { headers: { Authorization: `Bearer ${token}` } }),
+        ]);
+
+        const portfolioData = await portfolioRes.json();
+        const marketData = await marketRes.json();
+
+        if (portfolioRes.ok && marketRes.ok) {
+          const totalValue = calculatePortfolioValue(portfolioData.portfolio || [], Array.isArray(marketData) ? marketData : []);
+          if (totalValueEl) totalValueEl.textContent = formatCurrency(totalValue);
+          if (dayChangeEl) dayChangeEl.textContent = '+0.00';
+        } else {
+          if (totalValueEl) totalValueEl.textContent = '$0.00';
+          if (dayChangeEl) dayChangeEl.textContent = '+0.00';
+        }
+      } catch (e) {
+        container.innerHTML = `<p class="text-red-400">Failed to load profile.</p>`;
+        if (totalValueEl) totalValueEl.textContent = '$0.00';
+        if (dayChangeEl) dayChangeEl.textContent = '+0.00';
+      }
+    }
+
+    loadAccountData();
+  </script>
+</body>
+</html>

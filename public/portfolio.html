@@ -1,0 +1,116 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio • Hybrid Cryptoexchange</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+    }
+
+    .gradient-bg {
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a0f2e 50%, #0f172a 100%);
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .neon-text {
+      background: linear-gradient(90deg, #22d3ee, #a855f7);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .asset-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 20px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 12px;
+      margin-bottom: 10px;
+      transition: all 0.2s;
+    }
+    .asset-row:hover {
+      background: rgba(255,255,255,0.1);
+      transform: translateX(6px);
+    }
+  </style>
+</head>
+<body class="gradient-bg min-h-screen text-white">
+
+ <header class="border-b border-white/10 bg-black/40 backdrop-blur-md sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-9 h-9 bg-gradient-to-br from-cyan-400 to-purple-600 rounded-xl flex items-center justify-center text-2xl font-bold">H</div>
+      <h1 class="text-2xl font-bold tracking-tight neon-text">Hybrid Cryptoexchange</h1>
+    </div>
+
+    <nav class="flex items-center gap-8 text-sm font-medium">
+      <a href="index.html" class="nav-link">Dashboard</a>
+      <a href="market.html" class="nav-link">Markets</a>
+      <a href="order.html" class="nav-link">Trade</a>
+      <a href="sell.html" class="nav-link">Sell</a>
+      <a href="portfolio.html" class="nav-link">Portfolio</a>
+      <a href="account.html" class="nav-link">Account</a>
+    </nav>
+
+    <div id="auth-status" class="text-sm"></div>
+  </div>
+</header>
+
+  <main class="max-w-7xl mx-auto px-6 py-8">
+    <div class="mb-8">
+      <h1 class="text-4xl font-bold mb-2">My Portfolio</h1>
+      <p class="text-gray-400">Real-time wallet balances and asset overview</p>
+    </div>
+
+    <div class="glass-card rounded-3xl p-8">
+      <div class="portfolio-header flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+        <div>
+          <h2 class="text-2xl font-semibold mb-1">Wallet Balances</h2>
+          <p class="text-gray-400">View your holdings across all assets</p>
+        </div>
+        
+        <div class="portfolio-actions flex gap-3">
+          <input id="portfolio-user-id" 
+                 type="text" 
+                 placeholder="Enter Trader ID" 
+                 class="bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:outline-none focus:border-cyan-400 transition-colors w-full md:w-80" />
+          <button id="portfolio-button" 
+                  type="button"
+                  class="px-8 bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 rounded-2xl font-semibold whitespace-nowrap">
+            Load Portfolio
+          </button>
+        </div>
+      </div>
+
+      <div id="portfolio-results" class="portfolio-table-wrapper min-h-[400px]">
+        <p class="empty-state text-gray-400 text-center py-20">
+          Portfolio data will appear here after loading.
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <script src="app.js" defer></script>
+  <script>
+  // Highlight current page
+  const currentPage = window.location.pathname.split("/").pop() || "index.html";
+  document.querySelectorAll('.nav-link').forEach(link => {
+    if (link.getAttribute('href') === currentPage) {
+      link.classList.add('active');
+    }
+  });
+</script>
+</body>
+</html>

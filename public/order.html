@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trade • Hybrid Cryptoexchange</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+    }
+
+    .gradient-bg {
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a0f2e 50%, #0f172a 100%);
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .neon-text {
+      background: linear-gradient(90deg, #22d3ee, #a855f7);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .badge {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: all 0.2s;
+    }
+    .badge:hover {
+      background: rgba(34, 211, 238, 0.15);
+      border-color: #22d3ee;
+      color: #67e8f9;
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body class="gradient-bg min-h-screen text-white">
+
+<header class="border-b border-white/10 bg-black/40 backdrop-blur-md sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-9 h-9 bg-gradient-to-br from-cyan-400 to-purple-600 rounded-xl flex items-center justify-center text-2xl font-bold">H</div>
+      <h1 class="text-2xl font-bold tracking-tight neon-text">Hybrid Cryptoexchange</h1>
+    </div>
+
+    <nav class="flex items-center gap-8 text-sm font-medium">
+      <a href="index.html" class="nav-link">Dashboard</a>
+      <a href="market.html" class="nav-link">Markets</a>
+      <a href="order.html" class="nav-link">Trade</a>
+      <a href="sell.html" class="nav-link">Sell</a>
+      <a href="portfolio.html" class="nav-link">Portfolio</a>
+      <a href="account.html" class="nav-link">Account</a>
+    </nav>
+
+    <div id="auth-status" class="text-sm"></div>
+  </div>
+</header>
+
+  <main class="max-w-7xl mx-auto px-6 py-8">
+    <div class="mb-8">
+      <h1 class="text-4xl font-bold mb-2">Trading Terminal</h1>
+      <p class="text-gray-400">Place buy and sell orders instantly on the global market</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+      <!-- Order Form -->
+      <div class="lg:col-span-7 glass-card rounded-3xl p-8">
+        <h2 class="text-2xl font-semibold mb-6 flex items-center gap-3">
+          <i class="fas fa-exchange-alt text-cyan-400"></i> Submit New Order
+        </h2>
+
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-400 mb-2">Trader ID</label>
+          <div id="logged-user-id" 
+               class="info-box bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-cyan-400 font-medium">
+            Not signed in
+          </div>
+        </div>
+
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-400 mb-2">Your Wallet Snapshot</label>
+          <div id="order-portfolio" class="info-box bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-gray-300 text-sm">
+            Connect and place an order to view balances.
+          </div>
+        </div>
+
+        <form id="order-form" class="order-form space-y-6">
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-2">Trading Pair</label>
+            <input type="text" name="trading_pair" placeholder="BTC/USDT" required
+                   oninput="if(window.loadOrderbook) window.loadOrderbook(this.value.toUpperCase())"
+                   class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:outline-none focus:border-cyan-400 transition-colors text-lg">
+          </div>
+
+          <div class="grid grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-300 mb-2">Order Type</label>
+              <select name="order_type" required
+                      class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:outline-none focus:border-cyan-400 transition-colors text-lg">
+                <option value="BUY">BUY</option>
+                <option value="SELL">SELL</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-300 mb-2">Price (USDT)</label>
+              <input type="number" step="0.01" name="price" required
+                     class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:outline-none focus:border-cyan-400 transition-colors text-lg">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-2">Quantity</label>
+            <input type="number" step="0.0001" name="quantity" required
+                   class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:outline-none focus:border-cyan-400 transition-colors text-lg">
+          </div>
+
+          <button type="submit" 
+                  class="w-full py-5 rounded-2xl bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 font-semibold text-xl transition-all duration-300 shadow-lg shadow-cyan-500/30 mt-4">
+            Submit Order
+          </button>
+
+          <p id="order-message" class="message text-center text-sm min-h-[28px]"></p>
+        </form>
+      </div>
+
+      <!-- Suggested Pairs & Info -->
+      <div class="lg:col-span-5 glass-card rounded-3xl p-8">
+        <h2 class="text-2xl font-semibold mb-6">Suggested Pairs</h2>
+        
+        <div class="badge-list grid grid-cols-2 gap-3 mb-8">
+          <span onclick="document.querySelector('[name=\'trading_pair\']').value='BTC/USDT'; if(window.loadOrderbook) window.loadOrderbook('BTC/USDT')" 
+                class="badge cursor-pointer text-center py-3 px-4 rounded-2xl text-sm font-medium">BTC/USDT</span>
+          <span onclick="document.querySelector('[name=\'trading_pair\']').value='ETH/USDT'; if(window.loadOrderbook) window.loadOrderbook('ETH/USDT')" 
+                class="badge cursor-pointer text-center py-3 px-4 rounded-2xl text-sm font-medium">ETH/USDT</span>
+          <span onclick="document.querySelector('[name=\'trading_pair\']').value='SOL/USDT'; if(window.loadOrderbook) window.loadOrderbook('SOL/USDT')" 
+                class="badge cursor-pointer text-center py-3 px-4 rounded-2xl text-sm font-medium">SOL/USDT</span>
+          <span onclick="document.querySelector('[name=\'trading_pair\']').value='BNB/USDT'; if(window.loadOrderbook) window.loadOrderbook('BNB/USDT')" 
+                class="badge cursor-pointer text-center py-3 px-4 rounded-2xl text-sm font-medium">BNB/USDT</span>
+        </div>
+
+        <div class="bg-white/5 border border-white/10 rounded-2xl p-6 mb-8">
+          <h3 class="font-medium mb-3 flex items-center gap-2">
+            <i class="fas fa-info-circle text-cyan-400"></i> Pro Tips
+          </h3>
+          <ul class="space-y-3 text-sm text-gray-400">
+            <li class="flex gap-2">
+              <span class="text-cyan-400">•</span>
+              Check live prices on the <a href="market.html" class="text-cyan-400 hover:underline">Markets</a> page
+            </li>
+            <li class="flex gap-2">
+              <span class="text-cyan-400">•</span>
+              Use limit orders for better price control
+            </li>
+            <li class="flex gap-2">
+              <span class="text-cyan-400">•</span>
+              Always verify your order details before submitting
+            </li>
+          </ul>
+        </div>
+
+        <!-- Order Book Section -->
+        <div>
+          <h3 class="text-xl font-semibold mb-4 flex items-center gap-2">
+            <i class="fas fa-list text-cyan-400"></i> Global Order Book
+          </h3>
+          <div id="orderbook-section" class="bg-white/5 border border-white/10 rounded-2xl p-6 min-h-[280px]">
+            <p class="text-gray-400 text-sm">Loading order book...</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="app.js" defer></script>
+  <script>
+  // Highlight current page
+  const currentPage = window.location.pathname.split("/").pop() || "index.html";
+  document.querySelectorAll('.nav-link').forEach(link => {
+    if (link.getAttribute('href') === currentPage) {
+      link.classList.add('active');
+    }
+  });
+</script>
+</body>
+</html>
