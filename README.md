@@ -2,7 +2,7 @@
 
 A high-performance, enterprise-grade cryptocurrency exchange platform built with a hybrid database architecture. This project leverages **Oracle Database** for high-integrity transactional data and **MongoDB** for flexible analytics and system logging.
 
-## 🚀 Key Features
+## Key Features
 
 - **Advanced Matching Engine**: Core trading logic (Buy/Sell/Match) implemented directly in Oracle using PL/SQL stored procedures for maximum speed and data integrity.
 - **Hybrid Data Management**:
@@ -12,7 +12,7 @@ A high-performance, enterprise-grade cryptocurrency exchange platform built with
 - **Modern Trading Terminal**: A sleek React-based interface for placing limit orders and viewing a global order book.
 - **Automated Auditing**: Database triggers automatically log all order status changes for compliance and security.
 
-## 🏗 Architecture
+## Architecture
 
 - **Frontend**: React 19, TypeScript, Vite, Tailwind CSS.
 - **Backend**: Node.js, Express.
@@ -63,7 +63,7 @@ npm run dev
 npm run dev
 ```
 
-## 📊 Database Objects Overview
+## Database Objects Overview
 
 - **`reserve_order_funds`**: Stored procedure to atomically lock funds for an order.
 - **`match_all_orders`**: The "Sweeping" matching engine that executes trades directly in SQL.
