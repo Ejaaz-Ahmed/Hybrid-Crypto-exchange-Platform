@@ -1,6 +1,3 @@
--- Oracle schema for Cryptocurrency Exchange Platform
--- Run this script once in Oracle to create the relational tables.
-
 CREATE TABLE USERS (
   user_id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   full_name VARCHAR2(200) NOT NULL,

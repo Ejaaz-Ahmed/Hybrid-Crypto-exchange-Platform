@@ -12,12 +12,7 @@ export async function executeQuery(sql, binds = []) {
 }
 
 export async function getWalletBalance(userId, symbol) {
-    const sql = `
-        SELECT w.balance 
-        FROM wallets w 
-        JOIN assets a ON w.asset_id = a.asset_id 
-        WHERE w.user_id = :userId AND a.symbol = :symbol
-    `;
+    const sql = `SELECT get_available_balance(:userId, :symbol) FROM DUAL`;
     const result = await executeQuery(sql, { userId, symbol });
     return result.rows.length > 0 ? result.rows[0][0] : 0;
 }
