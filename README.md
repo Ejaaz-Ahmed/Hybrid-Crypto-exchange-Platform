@@ -70,5 +70,3 @@ npm run dev
 - **`get_available_balance`**: A precise PL/SQL function for real-time spendable balance calculation.
 - **`trg_log_order_status`**: Audit trigger for order history.
 
-## 📄 License
-This project is licensed under the ISC License.
